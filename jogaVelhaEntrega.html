@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo Da Velha</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        body {
+            background: linear-gradient(to right, rgb(8, 80, 120), rgb(133, 216, 206));
+        }
+
+        h1{
+            display: flex;
+            justify-content: center;
+            font-size: 55px;
+            color: darkgray;
+        }
+        
+        .fundoTabela {
+            margin: 0px 330px 0px 330px;
+            border: 1px solid;
+            background-color: #98FB98
+        }
+        .tabelaVelha {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0px 40px 0px;
+        }
+
+        .tamanhoIcone {
+            width: 50px;
+            height: 50px;
+            font-size: 50px;
+        }
+
+        .tabelaVelha td {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #4F4F4F;
+            color: rgba(0,0,0,.64);;
+            font-size: 40px;
+            text-align: center;
+        }
+
+        .computador {
+            display: none;
+        }
+
+        .computador, .usuario {
+            text-align: center;
+            color: rgba(0,0,0,.54);
+            font-size: 25px;
+            margin-bottom: 30px;
+        }        
+    </style>
+</head>
+<body>
+    <h1>Jogo da velha</h1>
+    <div class="usuario" id="user"> 
+        Vez do usuario
+        <i style="margin-left: 10px" class='fas fa-times'></i>
+    </div>
+    <div class="computador" id="comp">
+        Vez do computador
+        <i style="margin-left: 10px" class='fas fa-circle'></i>
+    </div>
+    <div class="fundoTabela">
+        <table class="tabelaVelha" id="table-principal">
+            <tr>
+                <td id="linha1Coluna1" class="celula" onclick="marcaOpcao('linha1Coluna1', 1)"></td>
+                <td id="linha1Coluna2" class="celula" onclick="marcaOpcao('linha1Coluna2', 2)"></td>
+                <td id="linha1Coluna3" class="celula" onclick="marcaOpcao('linha1Coluna3', 3)"></td>
+            </tr>
+            <tr>
+                <td id="linha2Coluna1" class="celula" onclick="marcaOpcao('linha2Coluna1', 4)"></td>
+                <td id="linha2Coluna2" class="celula" onclick="marcaOpcao('linha2Coluna2', 5)"></td>
+                <td id="linha2Coluna3" class="celula" onclick="marcaOpcao('linha2Coluna3', 6)"></td>
+            </tr>
+            <tr>
+                <td id="linha3Coluna1" class="celula" onclick="marcaOpcao('linha3Coluna1', 7)"></td>
+                <td id="linha3Coluna2" class="celula" onclick="marcaOpcao('linha3Coluna2', 8)"></td>
+                <td id="linha3Coluna3" class="celula" onclick="marcaOpcao('linha3Coluna3', 9)"></td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        var quadrantesMarcados = []
+        var arrayControle = [];
+        var matrizIdComQuadrante = [
+            "",
+            "linha1Coluna1",
+            "linha1Coluna2",
+            "linha1Coluna3",
+            "linha2Coluna1",
+            "linha2Coluna2",
+            "linha2Coluna3",
+            "linha3Coluna1",
+            "linha3Coluna2",
+            "linha3Coluna3",
+        ]
+
+        function marcaOpcao(id, quadrante) {
+            if(quadrantesMarcados.indexOf(quadrante) == -1) {
+                preencheVelha(id, "X", quadrante);
+                efetuarJogadaDaMaquina();
+            }            
+        }
+
+        function efetuarJogadaDaMaquina() {
+             var posicaoComputador = Math.floor(Math.random() * 10);
+             if(quadrantesMarcados.indexOf(posicaoComputador) == -1) {
+                var cedulaComp = matrizIdComQuadrante[posicaoComputador];
+                preencheVelha(cedulaComp, "O", posicaoComputador);
+             }else {
+                efetuarJogadaDaMaquina();
+             }
+        }
+
+        function preencheVelha(idQuadrante, tipo, valor) {
+            if(valor == 0){
+                return;
+            }
+            var posicao = document.getElementById(idQuadrante);
+            if(tipo == "X") {
+                posicao.innerHTML = "<i class='fas fa-times'></i>";
+                $(".cedula").addClass('tamanhoIcone');
+            }else {
+                document.getElementById('user').style.display = 'none';
+                document.getElementById('comp').style.display = 'block';
+                setTimeout(function() {
+                    posicao.innerHTML = "<i class='fas fa-circle'></i>";
+                },2000);
+              
+                setTimeout(function() {
+                   document.getElementById('user').style.display = 'block';
+                   document.getElementById('comp').style.display = 'none';
+                }, 2000)
+            }
+            quadrantesMarcados.push(valor); 
+        }
+    </script>
+</body>
+</html>
